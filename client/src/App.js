@@ -6,6 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
 import {Provider} from './context';
+import Lyrics from "./components/Lyrics/Lyrics";
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <Header />
 
         <Switch>
-          <Route path="/" component={Hero} />
+          <Route exact path="/" component={Hero} />
+          <Route path="/lyrics/track/:id" component={Lyrics} />
         </Switch>
       </Provider>
     </div>
