@@ -8,6 +8,9 @@ const path = require("path");
 
 app.use(express.static(path.join(__dirname, "public")));
 
+// Routes
+const lyricsJS = require("./routes/lyrics");
+
 // Configuration
 require('dotenv').config();
 const port = process.env.PORT || 8080;
@@ -16,6 +19,9 @@ const port = process.env.PORT || 8080;
 app.use(express.json());
 app.use(cors());
 // app.use(morgan('tiny'));
+
+// Routes
+app.use("/", lyricsJS);
 
 app.listen(port, () => {
     console.log(`Express server is up and running on Port ${port}!`);

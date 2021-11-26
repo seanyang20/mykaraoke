@@ -1,41 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import Consumer from '../../context';
 
 const apiKey = '400a847c3fba710765829132d1b9052b';
 
-export default class Lyrics extends Component {
-    state = {
-        track: {},
-        lyrics: {}
-    };
+export default class Search extends Component {
+    // state = {
+    //     track: {},
+    //     lyrics: {}
+    // };
 
-    componentDidMount() {
-        axios.get(`https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${this.props.match.params.id}&apikey=${apiKey}`)
-        .then(res => {
-            // console.log(res.data);
-            this.setState({lyrics: res.data.message.body.lyrics});
-            console.log(this.props.match.params.id);
-            return axios.get(`https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.get?track_id=${this.props.match.params.id}&apikey=${apiKey}`)
-            // .then(res => {
-            //     console.log(res);
-            //     this.setState({track: res.data.message.body.track});
-            // })
-        })
-        .then(res => {
-                console.log(res);
-                this.setState({track: res.data.message.body.track});
-            })
-        .catch(err => console.log(err));
-    }
+
 
     render() {
-        const { track, lyrics } = this.state;
-        console.log(track);
-        if (track === undefined || lyrics === undefined || Object.keys(track).length === 0 ||
-        Object.keys(lyrics).length === 0){
-            return <p>Loading...</p>
-        } else {
+   
             return (
                 <React.Fragment>
                     <Link to="/" className="btn btn-dark btn-sm sb-4">
@@ -66,4 +45,3 @@ export default class Lyrics extends Component {
             )
         }
     }
-}
