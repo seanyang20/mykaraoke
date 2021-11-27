@@ -15,7 +15,7 @@ export default class Lyrics extends Component {
         .then(res => {
             // console.log(res.data);
             this.setState({lyrics: res.data.message.body.lyrics});
-            console.log(this.props.match.params.id);
+            // console.log(this.props.match.params.id);
             return axios.get(`https://api.musixmatch.com/ws/1.1/track.get?track_id=${this.props.match.params.id}&apikey=${apiKey}`)
             // .then(res => {
             //     console.log(res);

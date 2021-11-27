@@ -1,56 +1,79 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { Link } from "react-router-dom";
-import { Consumer}  from '../../context';
+import React, { Component } from "react";
+import axios from "axios";
+// import { Link } from "react-router-dom";
+import { Consumer } from "../../context";
 
-const apiKey = '400a847c3fba710765829132d1b9052b';
+const apiKey = "400a847c3fba710765829132d1b9052b";
 
 export default class Search extends Component {
-    state = {
-        trackTitle: ''
-    };
+  state = {
+    trackTitle: "",
+  };
 
-    onChange = (event) => {
-        console.log("inside onchange fr search");
-        this.setState({[event.target.name]: event.target.value});
-    }
+  onChange = (event) => {
+    console.log("inside onchange for search");
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
+  findTrack = (dispatch, event) => {
+    console.log("inside findTrack");
+    event.preventDefault();
 
-    render() {
-   
+    axios
+    .get(
+      `https://api.musixmatch.com/ws/1.1/track.search?q_track=${this.state.trackTitle}&page_size=10&page=1&s_track_rating=desc&apikey=${apiKey}`
+    )
+    .then((res) => {
+      console.log(res.data);
+    dispatch({
+        type: 'SEARCH_TRACKS',
+        payload: res.data.message.body.track_list
+    });
+    
+    this.setState({trackTitle: ''});
+    })
+    .catch((err) => console.log(err));
+
+  }
+
+  render() {
+    return (
+      <div>
+        <Consumer>
+          {(value) => {
+              // console.log(value);
+            const { dispatch } = value;
+            // console.log(dispatch);
             return (
-                <div>
-                <Consumer>
-                    {value => {
-                        return (
-                            <div className="card card-body mb-4 p-4">
-                                <h1 className="display-4 text-center">
-                                    <i className="fas fa-music" />Search for a Song
-                                </h1>
-                                <p className="lead text-center">Get the lyrics for any song</p>
-                                <form>
-                                    <div className="form-group">
-                                        <input
-                                            type="text"
-                                            className="form-control form=control-lg"
-                                            placeholder="Song title..."
-                                            name="trackTitle"
-                                            value={this.state.trackTitle}
-                                            onChange={this.onChange}
-                                            />
-                                       
-                                    </div>
-                                    <button
-                                        className="btn btn-primary btn-lg btn-block mb-5"
-                                        type="submit">
-                                    Get Track Lyrics
-                                    </button>
-                                </form>
-                            </div>
-                        )
-                    }}
-                </Consumer>
-                </div>
-            )
-        }
-    }
+              <div className="card card-body mb-4 p-4">
+                <h1 className="display-4 text-center">
+                  <i className="fas fa-music" />
+                  Search for a Song
+                </h1>
+                <p className="lead text-center">Get the lyrics for any song</p>
+                <form onSubmit={this.findTrack.bind(this, dispatch)}>
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      className="form-control form=control-lg"
+                      placeholder="Song title..."
+                      name="trackTitle"
+                      value={this.state.trackTitle}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <button
+                    className="btn btn-primary btn-lg btn-block mb-5"
+                    type="submit"
+                  >
+                    Get Track Lyrics
+                  </button>
+                </form>
+              </div>
+            );
+          }}
+        </Consumer>
+      </div>
+    );
+  }
+}
